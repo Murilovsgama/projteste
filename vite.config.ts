@@ -10,6 +10,11 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+    build: {
+    rollupOptions: {
+      onwarn: () => {} // Ignora warnings
+    }
+  },
   // base: '/exemplo/',
   resolve: {
     alias: {

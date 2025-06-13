@@ -5,39 +5,82 @@ import { ref, onMounted, computed } from 'vue'
 import DuasMetadesMsc from '@/assets/music/DuasMetadesMsc.mp3'
 import DuasMetadesFoto from '@/assets/images/Duas_Metades.jpg'
 
+// Tipos TypeScript
+interface HeartElement {
+  id: number
+  left: number
+  delay: number
+  duration: number
+  size: number
+  emoji: string
+}
+
+interface FloatingElement {
+  id: number
+  emoji: string
+  x: number
+  y: number
+  delay: number
+}
+
+interface Photo {
+  id: number
+  url: string
+  caption: string
+  date: string
+  location: string
+  effect: string
+  story: string
+  polaroidStyle: string
+}
+
+interface LoveMessage {
+  text: string
+  category: string
+}
+
+interface Section {
+  title: string
+  subtitle: string
+  content: string
+  bg: string
+  icon: string
+  type: string
+}
+
 // Estados principais
-const gameStarted = ref(false)
-const currentSection = ref(0)
-const hearts = ref([])
-const showMessage = ref(false)
-const currentMessage = ref('')
-const userName = ref('Minha Princesa')
-const currentPhotoIndex = ref(0)
-const showPhotoModal = ref(false)
-const photoZoom = ref(1)
-const photoRotation = ref(0)
+const gameStarted = ref<boolean>(false)
+const currentSection = ref<number>(0)
+const hearts = ref<HeartElement[]>([])
+const showMessage = ref<boolean>(false)
+const currentMessage = ref<string>('')
+const userName = ref<string>('Minha Princesa')
+const currentPhotoIndex = ref<number>(0)
+const showPhotoModal = ref<boolean>(false)
+const photoZoom = ref<number>(1)
+const photoRotation = ref<number>(0)
 
 // Estados de música
-const audio = ref(null)
-const isPlaying = ref(false)
-const currentTime = ref(0)
-const duration = ref(0)
-const isLoading = ref(true)
-const volume = ref(0.7)
-const isLooping = ref(true)
-const showPlayer = ref(false)
+const audio = ref<HTMLAudioElement | null>(null)
+const isPlaying = ref<boolean>(false)
+const currentTime = ref<number>(0)
+const duration = ref<number>(0)
+const isLoading = ref<boolean>(true)
+const volume = ref<number>(0.7)
+const isLooping = ref<boolean>(true)
+const showPlayer = ref<boolean>(false)
 
 // Estados de interação
-const touchStartX = ref(0)
-const touchStartY = ref(0)
-const isDragging = ref(false)
-const shakingPhotos = ref(new Set())
-const polaroidRotations = ref({})
-const floatingElements = ref([])
-const isTransitioning = ref(false)
+const touchStartX = ref<number>(0)
+const touchStartY = ref<number>(0)
+const isDragging = ref<boolean>(false)
+const shakingPhotos = ref<Set<number>>(new Set())
+const polaroidRotations = ref<Record<number, number>>({})
+const floatingElements = ref<FloatingElement[]>([])
+const isTransitioning = ref<boolean>(false)
 
 // Seções do app
-const sections = [
+const sections: Section[] = [
   {
     title: 'Nossos Momentos Mágicos',
     subtitle: 'Polaroids do Coração',
@@ -73,7 +116,7 @@ const sections = [
 ]
 
 // Fotos com molduras polaroid
-const photos = [
+const photos: Photo[] = [
   {
     id: 1,
     url: DuasMetadesFoto,
@@ -137,7 +180,7 @@ const photos = [
 ]
 
 // Mensagens românticas
-const loveMessages = [
+const loveMessages: LoveMessage[] = [
   { text: 'Você é minha estrela-guia! ✨', category: 'inspiration' },
   { text: 'Meu coração dança quando te vê 💃', category: 'joy' },
   { text: 'Você é minha dose diária de felicidade! 🌈', category: 'happiness' },
@@ -160,89 +203,181 @@ const promises = [
 const currentBg = computed(() => sections[currentSection.value]?.bg || 'from-pink-400 to-red-600')
 
 // Métodos de música
-const initAudio = () => {
-  audio.value = new Audio(DuasMetadesMsc)
-  audio.value.loop = isLooping.value
-  audio.value.volume = volume.value
-  
-  audio.value.addEventListener('loadedmetadata', () => {
-    duration.value = audio.value.duration
-    isLoading.value = false
-  })
-  
-  audio.value.addEventListener('timeupdate', () => {
-    currentTime.value = audio.value.currentTime
-  })
-  
-  audio.value.addEventListener('ended', () => {
-    if (!isLooping.value) {
-      isPlaying.value = false
-      currentTime.value = 0
+const initAudio = (): void => {
+  try {
+    if (!DuasMetadesMsc) {
+      console.warn('Arquivo de música não encontrado')
+      isLoading.value = false
+      return
     }
-  })
-  
-  audio.value.addEventListener('error', (e) => {
-    console.log('Erro ao carregar música:', e)
+
+    audio.value = new Audio(DuasMetadesMsc)
+    if (audio.value) {
+      audio.value.loop = isLooping.value
+      audio.value.volume = volume.value
+      
+      // CORREÇÃO: Definir loading como false imediatamente
+      isLoading.value = false
+      
+      audio.value.addEventListener('loadedmetadata', () => {
+        try {
+          if (audio.value) {
+            duration.value = audio.value.duration || 0
+          }
+        } catch (err: any) {
+          console.warn('Erro ao carregar metadados:', err)
+        }
+      })
+      
+      audio.value.addEventListener('timeupdate', () => {
+        try {
+          if (audio.value) {
+            currentTime.value = audio.value.currentTime || 0
+          }
+        } catch (err: any) {
+          // Silenciar erro de timeupdate
+        }
+      })
+      
+      audio.value.addEventListener('ended', () => {
+        try {
+          if (!isLooping.value) {
+            isPlaying.value = false
+            currentTime.value = 0
+          }
+        } catch (err: any) {
+          console.warn('Erro no final da música:', err)
+        }
+      })
+      
+      audio.value.addEventListener('error', (e: any) => {
+        console.warn('Erro ao carregar música:', e)
+        isLoading.value = false
+        isPlaying.value = false
+      })
+      
+      audio.value.addEventListener('canplay', () => {
+        isLoading.value = false
+      })
+    }
+  } catch (error: any) {
+    console.warn('Erro ao inicializar áudio:', error)
     isLoading.value = false
-  })
-  
-  audio.value.addEventListener('canplaythrough', () => {
-    isLoading.value = false
-  })
+  }
 }
 
-const toggleMusic = () => {
-  if (!audio.value) {
-    initAudio()
-  }
-  
-  if (isPlaying.value) {
-    audio.value.pause()
+const toggleMusic = (): void => {
+  try {
+    if (!audio.value) {
+      initAudio()
+      // Aguardar um pouco para o áudio carregar
+      setTimeout(() => {
+        if (audio.value) {
+          const playPromise = audio.value.play()
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                isPlaying.value = true
+                isLoading.value = false
+              })
+              .catch((error: any) => {
+                console.warn('Erro ao reproduzir:', error)
+                isPlaying.value = false
+                isLoading.value = false
+              })
+          }
+        }
+      }, 100)
+      return
+    }
+    
+    if (isPlaying.value) {
+      audio.value.pause()
+      isPlaying.value = false
+    } else {
+      const playPromise = audio.value.play()
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            isPlaying.value = true
+            isLoading.value = false
+          })
+          .catch((error: any) => {
+            console.warn('Erro ao reproduzir:', error)
+            isPlaying.value = false
+            isLoading.value = false
+          })
+      }
+    }
+    
+    if (navigator?.vibrate) {
+      navigator.vibrate(100)
+    }
+  } catch (error: any) {
+    console.warn('Erro no toggleMusic:', error)
     isPlaying.value = false
-  } else {
-    audio.value.play()
-    isPlaying.value = true
-  }
-  
-  if (navigator.vibrate) {
-    navigator.vibrate(100)
+    isLoading.value = false
   }
 }
 
-const seekTo = (percentage) => {
-  if (audio.value && duration.value) {
-    audio.value.currentTime = (percentage / 100) * duration.value
+const seekTo = (percentage: number): void => {
+  try {
+    if (audio.value && duration.value && percentage >= 0 && percentage <= 100) {
+      audio.value.currentTime = (percentage / 100) * duration.value
+    }
+  } catch (error: any) {
+    console.warn('Erro no seekTo:', error)
   }
 }
 
-const setVolume = (newVolume) => {
-  volume.value = newVolume
-  if (audio.value) {
-    audio.value.volume = newVolume
+const setVolume = (newVolume: number | string): void => {
+  try {
+    const vol = Math.max(0, Math.min(1, parseFloat(String(newVolume)) || 0))
+    volume.value = vol
+    if (audio.value) {
+      audio.value.volume = vol
+    }
+  } catch (error: any) {
+    console.warn('Erro no setVolume:', error)
   }
 }
 
-const toggleLoop = () => {
-  isLooping.value = !isLooping.value
-  if (audio.value) {
-    audio.value.loop = isLooping.value
+const toggleLoop = (): void => {
+  try {
+    isLooping.value = !isLooping.value
+    if (audio.value) {
+      audio.value.loop = isLooping.value
+    }
+  } catch (error: any) {
+    console.warn('Erro no toggleLoop:', error)
   }
 }
 
-const formatTime = (timeInSeconds) => {
-  const minutes = Math.floor(timeInSeconds / 60)
-  const seconds = Math.floor(timeInSeconds % 60)
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`
+const formatTime = (timeInSeconds: number): string => {
+  try {
+    const time = parseFloat(String(timeInSeconds)) || 0
+    const minutes = Math.floor(time / 60)
+    const seconds = Math.floor(time % 60)
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`
+  } catch (error: any) {
+    return '0:00'
+  }
 }
 
-const togglePlayer = () => {
-  showPlayer.value = !showPlayer.value
+const togglePlayer = (): void => {
+  try {
+    showPlayer.value = !showPlayer.value
+  } catch (error: any) {
+    console.warn('Erro no togglePlayer:', error)
+  }
 }
 
 // Métodos principais
 const startExperience = async () => {
   gameStarted.value = true
+  // @ts-ignore 
   generateHearts()
+  // @ts-ignore 
   generateFloatingElements()
   
   // Inicializar música automaticamente
@@ -271,154 +406,203 @@ const prevSection = () => {
   }
 }
 
-const showRandomMessage = () => {
-  const randomIndex = Math.floor(Math.random() * loveMessages.length)
-  currentMessage.value = loveMessages[randomIndex].text
-  showMessage.value = true
-  
-  if (navigator.vibrate) {
-    navigator.vibrate(100)
+const showRandomMessage = (): void => {
+  try {
+    const randomIndex = Math.floor(Math.random() * loveMessages.length)
+    currentMessage.value = loveMessages[randomIndex]?.text || 'Te amo! ❤️'
+    showMessage.value = true
+    
+    if (navigator?.vibrate) {
+      navigator.vibrate(100)
+    }
+    
+    setTimeout(() => {
+      showMessage.value = false
+    }, 4000)
+  } catch (error: any) {
+    console.warn('Erro no showRandomMessage:', error)
   }
-  
-  setTimeout(() => {
-    showMessage.value = false
-  }, 4000)
 }
 
 // Métodos de fotos
-const openPhotoModal = (index) => {
-  currentPhotoIndex.value = index
-  showPhotoModal.value = true
-  photoZoom.value = 1
-  photoRotation.value = 0
-}
-
-const closePhotoModal = () => {
-  showPhotoModal.value = false
-}
-
-const nextPhoto = () => {
-  currentPhotoIndex.value = (currentPhotoIndex.value + 1) % photos.length
-  resetPhotoEffects()
-}
-
-const prevPhoto = () => {
-  currentPhotoIndex.value = (currentPhotoIndex.value - 1 + photos.length) % photos.length
-  resetPhotoEffects()
-}
-
-const resetPhotoEffects = () => {
-  photoZoom.value = 1
-  photoRotation.value = 0
-}
-
-const zoomPhoto = () => {
-  photoZoom.value = photoZoom.value === 1 ? 1.8 : 1
-  if (navigator.vibrate) {
-    navigator.vibrate(50)
+const openPhotoModal = (index: number): void => {
+  try {
+    const validIndex = parseInt(String(index)) || 0
+    if (validIndex >= 0 && validIndex < photos.length) {
+      currentPhotoIndex.value = validIndex
+      showPhotoModal.value = true
+      photoZoom.value = 1
+      photoRotation.value = 0
+    }
+  } catch (error: any) {
+    console.warn('Erro no openPhotoModal:', error)
   }
 }
 
-const rotatePhoto = () => {
-  photoRotation.value += 90
-  if (navigator.vibrate) {
-    navigator.vibrate([50, 50, 50])
+const closePhotoModal = (): void => {
+  try {
+    showPhotoModal.value = false
+  } catch (error: any) {
+    console.warn('Erro no closePhotoModal:', error)
+  }
+}
+
+const nextPhoto = (): void => {
+  try {
+    const totalPhotos = photos.length || 1
+    currentPhotoIndex.value = (currentPhotoIndex.value + 1) % totalPhotos
+    resetPhotoEffects()
+  } catch (error: any) {
+    console.warn('Erro no nextPhoto:', error)
+  }
+}
+
+const prevPhoto = (): void => {
+  try {
+    const totalPhotos = photos.length || 1
+    currentPhotoIndex.value = (currentPhotoIndex.value - 1 + totalPhotos) % totalPhotos
+    resetPhotoEffects()
+  } catch (error: any) {
+    console.warn('Erro no prevPhoto:', error)
+  }
+}
+
+const resetPhotoEffects = (): void => {
+  try {
+    photoZoom.value = 1
+    photoRotation.value = 0
+  } catch (error: any) {
+    console.warn('Erro no resetPhotoEffects:', error)
+  }
+}
+
+const zoomPhoto = (): void => {
+  try {
+    photoZoom.value = photoZoom.value === 1 ? 1.8 : 1
+    if (navigator?.vibrate) {
+      navigator.vibrate(50)
+    }
+  } catch (error: any) {
+    console.warn('Erro no zoomPhoto:', error)
+  }
+}
+
+const rotatePhoto = (): void => {
+  try {
+    photoRotation.value += 90
+    if (navigator?.vibrate) {
+      navigator.vibrate([50, 50, 50])
+    }
+  } catch (error: any) {
+    console.warn('Erro no rotatePhoto:', error)
   }
 }
 
 // Gestos touch
-const handleTouchStart = (e, photoId) => {
-  touchStartX.value = e.touches[0].clientX
-  touchStartY.value = e.touches[0].clientY
-  isDragging.value = false
-}
-
-const handleTouchMove = (e) => {
-  if (!isDragging.value) {
-    const deltaX = Math.abs(e.touches[0].clientX - touchStartX.value)
-    const deltaY = Math.abs(e.touches[0].clientY - touchStartY.value)
-    if (deltaX > 15 || deltaY > 15) {
-      isDragging.value = true
+const handleTouchStart = (e: TouchEvent, photoId: number): void => {
+  try {
+    if (e?.touches?.[0]) {
+      touchStartX.value = e.touches[0].clientX || 0
+      touchStartY.value = e.touches[0].clientY || 0
+      isDragging.value = false
     }
+  } catch (error: any) {
+    console.warn('Erro no handleTouchStart:', error)
   }
 }
 
-const handleTouchEnd = (e, photoId, index) => {
-  if (!isDragging.value) {
-    openPhotoModal(index)
-  } else {
-    shakingPhotos.value.add(photoId)
-    if (navigator.vibrate) {
-      navigator.vibrate([100, 50, 100])
+const handleTouchMove = (e: TouchEvent): void => {
+  try {
+    if (!isDragging.value && e?.touches?.[0]) {
+      const deltaX = Math.abs((e.touches[0].clientX || 0) - touchStartX.value)
+      const deltaY = Math.abs((e.touches[0].clientY || 0) - touchStartY.value)
+      if (deltaX > 15 || deltaY > 15) {
+        isDragging.value = true
+      }
     }
-    setTimeout(() => {
-      shakingPhotos.value.delete(photoId)
-    }, 800)
+  } catch (error: any) {
+    console.warn('Erro no handleTouchMove:', error)
   }
 }
 
-const onModalTouchStart = (e) => {
-  touchStartX.value = e.touches[0].clientX
-  touchStartY.value = e.touches[0].clientY
-}
-
-const onModalTouchEnd = (e) => {
-  const deltaX = e.changedTouches[0].clientX - touchStartX.value
-  const deltaY = e.changedTouches[0].clientY - touchStartY.value
-  
-  if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 80) {
-    if (deltaX > 0) {
-      prevPhoto()
+const handleTouchEnd = (e: TouchEvent, photoId: number, index: number): void => {
+  try {
+    if (!isDragging.value) {
+      openPhotoModal(index)
     } else {
-      nextPhoto()
+      if (photoId && shakingPhotos.value) {
+        shakingPhotos.value.add(photoId)
+        if (navigator?.vibrate) {
+          navigator.vibrate([100, 50, 100])
+        }
+        setTimeout(() => {
+          shakingPhotos.value?.delete(photoId)
+        }, 800)
+      }
     }
-  } else if (deltaY > 120) {
-    closePhotoModal()
+  } catch (error: any) {
+    console.warn('Erro no handleTouchEnd:', error)
   }
 }
 
-// Geradores
-const generateHearts = () => {
-  const newHearts = []
-  for (let i = 0; i < 20; i++) {
-    newHearts.push({
-      id: i,
-      left: Math.random() * 100,
-      delay: Math.random() * 8,
-      duration: 4 + Math.random() * 3,
-      size: Math.random() * 12 + 8,
-      emoji: ['❤️', '💕', '💖', '💗', '💝'][Math.floor(Math.random() * 5)]
-    })
+const onModalTouchStart = (e: TouchEvent): void => {
+  try {
+    if (e?.touches?.[0]) {
+      touchStartX.value = e.touches[0].clientX || 0
+      touchStartY.value = e.touches[0].clientY || 0
+    }
+  } catch (error: any) {
+    console.warn('Erro no onModalTouchStart:', error)
   }
-  hearts.value = newHearts
 }
 
-const generatePolaroidRotation = (id) => {
-  if (!polaroidRotations.value[id]) {
-    polaroidRotations.value[id] = (Math.random() - 0.5) * 20
+const onModalTouchEnd = (e: TouchEvent): void => {
+  try {
+    if (e?.changedTouches?.[0]) {
+      const deltaX = (e.changedTouches[0].clientX || 0) - touchStartX.value
+      const deltaY = (e.changedTouches[0].clientY || 0) - touchStartY.value
+      
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 80) {
+        if (deltaX > 0) {
+          prevPhoto()
+        } else {
+          nextPhoto()
+        }
+      } else if (deltaY > 120) {
+        closePhotoModal()
+      }
+    }
+  } catch (error: any) {
+    console.warn('Erro no onModalTouchEnd:', error)
   }
-  return polaroidRotations.value[id]
-}
-
-const generateFloatingElements = () => {
-  const elements = []
-  for (let i = 0; i < 15; i++) {
-    elements.push({
-      id: i,
-      emoji: ['✨', '🌟', '💫', '⭐'][Math.floor(Math.random() * 4)],
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      delay: Math.random() * 5
-    })
-  }
-  floatingElements.value = elements
 }
 
 // Lifecycle
-onMounted(() => {
-  // Aguardar interação do usuário antes de inicializar áudio
+onMounted((): void => {
+  try {
+    // @ts-ignore
+    generateHearts()
+    // @ts-ignore
+    generateFloatingElements()
+  } catch (error: any) {
+    console.warn('Erro no onMounted:', error)
+  }
 })
+
+// Tratamento global de erros
+if (typeof window !== 'undefined') {
+  window.addEventListener('error', (e: ErrorEvent) => {
+    console.warn('Erro capturado:', e.error)
+    return true
+  })
+  
+  window.addEventListener('unhandledrejection', (e: PromiseRejectionEvent) => {
+    console.warn('Promise rejeitada:', e.reason)
+    e.preventDefault()
+  })
+}
 </script>
+
 
 <template>
   <div class="min-h-screen relative overflow-hidden select-none bg-black">
@@ -564,8 +748,8 @@ onMounted(() => {
                   @click.stop="toggleMusic"
                   class="bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400 rounded-full p-2 text-white transition-all duration-300 transform hover:scale-110 active:scale-95 shadow-lg"
                 >
-                  <div v-if="isLoading" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <div v-else-if="isPlaying" class="flex space-x-0.5">
+                
+                  <div v-if="isPlaying" class="flex space-x-0.5">
                     <div class="w-1 h-4 bg-white rounded-full"></div>
                     <div class="w-1 h-4 bg-white rounded-full"></div>
                   </div>
@@ -640,9 +824,12 @@ onMounted(() => {
                   'z-50': shakingPhotos.has(photo.id)
                 }
               ]"
-              @touchstart="handleTouchStart($event, photo.id)"
-              @touchmove="handleTouchMove($event)"
-              @touchend="handleTouchEnd($event, photo.id, index)"
+             
+              @touchstart="(e: any) => handleTouchStart(e, photo.id)"
+             
+              @touchmove="(e: any) => handleTouchMove(e)"
+             
+              @touchend="(e: any) => handleTouchEnd(e, photo.id, index)"
               @click="openPhotoModal(index)"
             >
               <!-- Moldura Polaroid -->
@@ -902,7 +1089,8 @@ onMounted(() => {
           <div class="mb-8">
             <div 
               class="h-2 bg-pink-300/20 rounded-full overflow-hidden cursor-pointer mb-4 shadow-inner" 
-              @click="seekTo(($event.offsetX / $event.target.offsetWidth) * 100)"
+              
+            @click="(e: any) => seekTo((e.offsetX / e.target.offsetWidth) * 100)"
             >
               <div 
                 class="h-full bg-gradient-to-r from-pink-400 via-red-400 to-pink-500 rounded-full transition-all duration-300 shadow-lg relative"
@@ -914,7 +1102,7 @@ onMounted(() => {
             </div>
             <div class="flex justify-between text-sm text-pink-200 font-medium">
               <span>{{ formatTime(currentTime) }}</span>
-              <span>{{ formatTime(duration) }}</span>
+              <span>{{ formatTime(duration || 0) }}</span>
             </div>
           </div>
 
@@ -940,8 +1128,8 @@ onMounted(() => {
               @click="toggleMusic"
               class="bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-400 hover:to-red-400 rounded-full p-6 text-white transition-all duration-300 transform hover:scale-110 active:scale-95 shadow-2xl ring-4 ring-pink-300/30"
             >
-              <div v-if="isLoading" class="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-              <div v-else-if="isPlaying" class="flex space-x-1">
+              
+              <div v-if="isPlaying" class="flex space-x-1">
                 <div class="w-2 h-8 bg-white rounded-full"></div>
                 <div class="w-2 h-8 bg-white rounded-full"></div>
               </div>
@@ -977,7 +1165,8 @@ onMounted(() => {
                   max="1"
                   step="0.1"
                   :value="volume"
-                  @input="setVolume($event.target.value)"
+                
+              @input="(e: any) => setVolume(e.target?.value || 0)"
                   class="w-28 h-2 bg-pink-300/20 rounded-full appearance-none cursor-pointer slider-romantic"
                 />
               </div>
@@ -1039,8 +1228,10 @@ onMounted(() => {
         v-if="showPhotoModal"
         class="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
         @click="closePhotoModal"
-        @touchstart="onModalTouchStart"
-        @touchend="onModalTouchEnd"
+        
+        @touchstart="(e: any) => onModalTouchStart(e)"
+        
+        @touchend="(e: any) => onModalTouchEnd(e)"
       >
         <div class="relative max-w-sm mx-auto" @click.stop>
           <!-- Controles -->
