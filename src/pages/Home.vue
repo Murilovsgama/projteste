@@ -1,4 +1,312 @@
-<script setup lang="ts">
+<style>
+.passionate-starlight {
+  background: 
+    radial-gradient(circle at 40% 20%, rgba(157, 23, 77, 0.6) 0%, transparent 50%),
+    radial-gradient(circle at 60% 70%, rgba(190, 24, 93, 0.5) 0%, transparent 50%),
+    radial-gradient(circle at 20% 60%, rgba(124, 58, 237, 0.4) 0%, transparent 50%),
+    linear-gradient(45deg, #0f172a 0%, #1e1b4b 25%, #7c2d12 50%, #be185d 75%, #4c1d95 100%);
+  animation: starlightShift 15s ease-in-out infinite;
+}
+
+.celebration-constellation {
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(245, 158, 11, 0.5) 0%, transparent 50%),
+    radial-gradient(circle at 75% 20%, rgba(236, 72, 153, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(139, 69, 197, 0.5) 0%, transparent 50%),
+    radial-gradient(circle at 80% 60%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #0f172a 0%, #1e1b4b 20%, #7c2d12 40%, #be185d 60%, #7c3aed 80%, #3b82f6 100%);
+  animation: constellationShift 12s ease-in-out infinite;
+}
+
+/* Animações do céu noturno */
+@keyframes nightSkyShift {
+  0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%, 0% 0%; }
+  25% { background-position: 100% 0%, 0% 100%, 80% 20%, 0% 0%; }
+  50% { background-position: 100% 100%, 0% 0%, 20% 80%, 0% 0%; }
+  75% { background-position: 0% 100%, 100% 0%, 60% 40%, 0% 0%; }
+}
+
+@keyframes nightSkyGradient {
+  0%, 100% { background-position: 30% 0%, 70% 30%, 20% 80%, 0% 0%; }
+  33% { background-position: 50% 10%, 90% 50%, 40% 60%, 0% 0%; }
+  66% { background-position: 10% 5%, 50% 70%, 80% 40%, 0% 0%; }
+}
+
+@keyframes midnightShift {
+  0%, 100% { background-position: 50% 0%, 80% 20%, 20% 80%, 0% 0%; }
+  50% { background-position: 70% 10%, 40% 60%, 60% 40%, 0% 0%; }
+}
+
+@keyframes starlightShift {
+  0%, 100% { background-position: 40% 20%, 60% 70%, 20% 60%, 0% 0%; }
+  50% { background-position: 60% 30%, 40% 50%, 80% 40%, 0% 0%; }
+}
+
+@keyframes constellationShift {
+  0%, 100% { background-position: 25% 25%, 75% 20%, 50% 80%, 80% 60%, 0% 0%; }
+  25% { background-position: 75% 30%, 25% 70%, 80% 40%, 40% 80%, 0% 0%; }
+  50% { background-position: 50% 60%, 90% 40%, 20% 60%, 60% 30%, 0% 0%; }
+  75% { background-position: 20% 40%, 60% 80%, 70% 20%, 90% 70%, 0% 0%; }
+}
+
+/* Estrelas e efeitos noturnos */
+.star-twinkle {
+  animation: starTwinkle 3s ease-in-out infinite;
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.shooting-star {
+  width: 2px;
+  height: 2px;
+  background: linear-gradient(45deg, transparent, #ffffff, transparent);
+  border-radius: 50%;
+  animation: shootingStar 3s ease-out forwards;
+}
+
+.shooting-star-bg {
+  width: 1px;
+  height: 1px;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  border-radius: 50%;
+  left: 10%;
+  top: 10%;
+  animation: shootingStarBg 4s ease-out infinite;
+}
+
+@keyframes shootingStar {
+  0% {
+    transform: translateX(0) translateY(0) scale(0);
+    opacity: 1;
+  }
+  10% {
+    transform: translateX(10px) translateY(10px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(300px) translateY(300px) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes shootingStarBg {
+  0%, 90% { opacity: 0; transform: translateX(0) translateY(0); }
+  10% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(200px) translateY(200px); }
+}
+
+/* Partículas noturnas */
+.romantic-night-particle {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(167, 139, 250, 0.3) 50%, transparent 100%);
+  border-radius: 50%;
+  animation: nightParticleFloat 8s ease-in-out infinite;
+}
+
+@keyframes nightParticleFloat {
+  0%, 100% { transform: translateY(0px) scale(1); opacity: 0.2; }
+  50% { transform: translateY(-15px) scale(1.1); opacity: 0.6; }
+}
+
+.romantic-moon-glow {
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(167, 139, 250, 0.05) 30%, transparent 70%);
+  border-radius: 50%;
+  transition: all 0.5s ease;
+  animation: moonGlow 4s ease-in-out infinite;
+}
+
+@keyframes moonGlow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.8; }
+}
+
+.romantic-night-transition {
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+  animation: nightTransitionPulse 0.8s ease-in-out;
+}
+
+@keyframes nightTransitionPulse {
+  0% { opacity: 0; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+/* Botão tema noturno */
+.romantic-night-button {
+  background: rgba(67, 56, 202, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: 20px;
+  padding: 24px 32px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: white;
+  box-shadow: 
+    0 8px 32px rgba(124, 58, 237, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.romantic-night-button:hover,
+.romantic-night-button:active {
+  background: rgba(67, 56, 202, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px rgba(124, 58, 237, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Polaroids noturnos */
+.night-polaroid {
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.3),
+    0 4px 10px rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.night-polaroid-modal {
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 10px 20px rgba(124, 58, 237, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Player noturno expandido */
+.romantic-night-player {
+  background: linear-gradient(135deg, 
+    rgba(15, 23, 42, 0.95) 0%, 
+    rgba(30, 27, 75, 0.9) 25%, 
+    rgba(49, 46, 129, 0.85) 50%, 
+    rgba(76, 29, 149, 0.9) 75%, 
+    rgba(88, 28, 135, 0.95) 100%);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-top: 1px solid rgba(167, 139, 250, 0.3);
+}
+
+/* Melhorias de contraste e legibilidade */
+.text-shadow-night {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Slider noturno */
+.slider-night {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, rgba(124, 58, 237, 0.3), rgba(67, 56, 202, 0.3));
+  outline: none;
+}
+
+.slider-night::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #7c3aed, #4338ca);
+  cursor: pointer;
+  border: 3px solid #ffffff;
+  box-shadow: 0 4px 8px rgba(76, 29, 149, 0.4);
+  transition: all 0.3s ease;
+}
+
+.slider-night::-webkit-slider-thumb:active {
+  transform: scale(1.2);
+  box-shadow: 0 6px 12px rgba(76, 29, 149, 0.6);
+}
+
+/* Efeitos de foco para acessibilidade noturna */
+button:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+}
+
+/* Otimizações para tema escuro */
+@media (prefers-color-scheme: dark) {
+  .night-polaroid {
+    background-color: rgba(255, 255, 255, 0.98);
+  }
+  
+  .night-polaroid-modal {
+    background-color: rgba(255, 255, 255, 0.99);
+  }
+}
+
+/* Animações suaves para elementos noturnos */
+.night-smooth-enter {
+  animation: nightSmoothEnter 0.6s ease-out;
+}
+
+@keyframes nightSmoothEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Estados de loading noturnos */
+.night-loading {
+  opacity: 0.7;
+  animation: nightLoading 1.5s ease-in-out infinite;
+}
+
+@keyframes nightLoading {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0.3; }
+}
+
+/* Melhorias para iPhone 11 específicas */
+@media only screen 
+  and (device-width: 414px) 
+  and (device-height: 896px) 
+  and (-webkit-device-pixel-ratio: 2) {
+  
+  .star-twinkle {
+    animation-duration: 2.5s;
+  }
+  
+  .romantic-night-particle {
+    animation-duration: 6s;
+  }
+  
+  /* Otimização de performance para animações */
+  .shooting-star,
+  .shooting-star-bg {
+    will-change: transform, opacity;
+  }
+}
+
+/* Suporte a reduced motion para tema noturno */
+@media (prefers-reduced-motion: reduce) {
+  .star-twinkle,
+  .romantic-night-particle,
+  .shooting-star,
+  .shooting-star-bg,
+  .romantic-moon-glow {
+    animation: none;
+  }
+  
+  .romantic-night-welcome,
+  .romantic-night-sky,
+  .dreamy-midnight,
+  .passionate-starlight,
+  .celebration-constellation {
+    animation: none;
+  }
+}
+</style><script setup lang="ts">
 import { ref, onMounted, computed, nextTick, onUnmounted } from 'vue'
 
 // Imports das mídias
@@ -99,13 +407,13 @@ const animationFrameId = ref<number | null>(null)
 const intersectionObserver = ref<IntersectionObserver | null>(null)
 const prefersReducedMotion = ref<boolean>(false)
 
-// Seções do app com fundos românticos modernos
+// Seções do app com fundo noturno romântico
 const sections: Section[] = [
   {
     title: 'Nossos Momentos Mágicos',
     subtitle: '',
     content: 'Cada foto é uma janela para nossas memórias mais preciosas...',
-    bg: 'romantic-sunset',
+    bg: 'romantic-night-sky',
     icon: '📸',
     type: 'photos'
   },
@@ -113,7 +421,7 @@ const sections: Section[] = [
     title: 'Galeria do Nosso Amor',
     subtitle: 'Coleção de Sorrisos',
     content: '',
-    bg: 'dreamy-aurora',
+    bg: 'dreamy-midnight',
     icon: '🖼️',
     type: 'gallery'
   },
@@ -121,7 +429,7 @@ const sections: Section[] = [
     title: `Para: ${userName.value} ❤️`,
     subtitle: 'Meu Amor Infinito',
     content: 'Você é a luz que ilumina meus dias e a melodia que embala meus sonhos...',
-    bg: 'passionate-love',
+    bg: 'passionate-starlight',
     icon: '💕',
     type: 'text'
   },
@@ -129,13 +437,13 @@ const sections: Section[] = [
     title: 'Feliz Dia dos Namorados!',
     subtitle: 'Celebrando Nosso Amor',
     content: 'Hoje e sempre, você será a razão do meu sorriso! 💕',
-    bg: 'celebration-glow',
+    bg: 'celebration-constellation',
     icon: '🎉',
     type: 'celebration'
   }
 ]
 
-// Fotos otimizadas para mobile
+// Fotos otimizadas para proporção 720x1280 (9:16)
 const photos: Photo[] = [
   {
     id: 1,
@@ -211,26 +519,67 @@ const loveMessages: LoveMessage[] = [
 ]
 
 // Computed
-const currentBg = computed(() => sections[currentSection.value]?.bg || 'romantic-sunset')
+const currentBg = computed(() => sections[currentSection.value]?.bg || 'romantic-night-sky')
 
 // Estados para efeitos de fundo
 const backgroundParticles = ref<Array<{id: number, x: number, y: number, size: number, opacity: number, speed: number}>>([])
 const mousePosition = ref({ x: 50, y: 50 })
 const backgroundTime = ref(0)
 
+// Gerar estrelas para fundo noturno
+const generateStars = (): void => {
+  if (prefersReducedMotion.value) return
+  
+  const starsArray = []
+  for (let i = 0; i < 150; i++) {
+    starsArray.push({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 3 + 1,
+      twinkle: Math.random() * 2 + 1,
+      brightness: Math.random() * 0.8 + 0.2
+    })
+  }
+  stars.value = starsArray
+}
+
+// Gerar estrelas cadentes ocasionais
+const generateShootingStar = (): void => {
+  if (prefersReducedMotion.value) return
+  
+  const newStar = {
+    id: Date.now(),
+    active: true
+  }
+  
+  shootingStars.value.push(newStar)
+  
+  setTimeout(() => {
+    shootingStars.value = shootingStars.value.filter(star => star.id !== newStar.id)
+  }, 3000)
+  
+  // Próxima estrela cadente em 8-15 segundos
+  setTimeout(generateShootingStar, Math.random() * 7000 + 8000)
+}
+
+// Estados para estrelas e efeitos noturnos
+const stars = ref<Array<{id: number, x: number, y: number, size: number, twinkle: number, brightness: number}>>([])
+const shootingStars = ref<Array<{id: number, active: boolean}>>([])
+
 // Gerar partículas românticas de fundo
 const generateBackgroundParticles = (): void => {
   if (prefersReducedMotion.value) return
   
   const particles = []
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 15; i++) {
     particles.push({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: Math.random() * 4 + 2,
-      opacity: Math.random() * 0.6 + 0.2,
-      speed: Math.random() * 2 + 1
+      size: Math.random() * 3 + 1,
+      opacity: Math.random() * 0.4 + 0.1,
+      speed: Math.random() * 1 + 0.5
     })
   }
   backgroundParticles.value = particles
@@ -790,10 +1139,14 @@ onMounted((): void => {
   try {
     detectSafariFeatures()
     
-    // Gerar efeitos de fundo
+    // Gerar efeitos de fundo noturno
+    generateStars()
     generateBackgroundParticles()
+    
     if (!prefersReducedMotion.value) {
       animateBackgroundParticles()
+      // Iniciar estrelas cadentes após 5 segundos
+      setTimeout(generateShootingStar, 5000)
     }
     
     // Event listeners para efeitos interativos
@@ -867,70 +1220,83 @@ window.addEventListener('unhandledrejection', (event) => {
       paddingBottom: safeAreaBottom + 'px'
     }"
   >
-    <!-- Tela Inicial Otimizada -->
-    <div v-if="!gameStarted" class="fixed inset-0 z-50 romantic-welcome-bg flex items-center justify-center">
-      <!-- Partículas flutuantes românticas -->
+    <!-- Tela Inicial com céu noturno -->
+    <div v-if="!gameStarted" class="fixed inset-0 z-50 romantic-night-welcome flex items-center justify-center">
+      <!-- Céu estrelado -->
       <div v-if="!prefersReducedMotion" class="absolute inset-0 overflow-hidden pointer-events-none">
-        <!-- Corações flutuantes -->
+        <!-- Estrelas fixas -->
         <div
-          v-for="i in 15"
-          :key="'welcome-heart-' + i"
-          class="absolute text-pink-200 romantic-float"
+          v-for="star in stars"
+          :key="'star-' + star.id"
+          class="absolute rounded-full bg-white star-twinkle"
           :style="{
-            left: Math.random() * 100 + '%',
-            top: Math.random() * 100 + '%',
-            fontSize: (8 + Math.random() * 12) + 'px',
-            animationDelay: Math.random() * 3 + 's',
-            animationDuration: (3 + Math.random() * 2) + 's'
-          }"
-        >
-          {{ ['❤️', '💕', '💖', '💗', '💝', '🌹', '✨'][Math.floor(Math.random() * 7)] }}
-        </div>
-        
-        <!-- Partículas de luz -->
-        <div
-          v-for="i in 25"
-          :key="'light-particle-' + i"
-          class="absolute w-1 h-1 bg-white rounded-full romantic-sparkle"
-          :style="{
-            left: Math.random() * 100 + '%',
-            top: Math.random() * 100 + '%',
-            animationDelay: Math.random() * 5 + 's',
-            animationDuration: (2 + Math.random() * 3) + 's'
+            left: star.x + '%',
+            top: star.y + '%',
+            width: star.size + 'px',
+            height: star.size + 'px',
+            opacity: star.brightness,
+            animationDelay: star.twinkle + 's',
+            animationDuration: (star.twinkle + 2) + 's'
           }"
         ></div>
+        
+        <!-- Estrelas cadentes -->
+        <div
+          v-for="shootingStar in shootingStars"
+          :key="'shooting-' + shootingStar.id"
+          class="absolute shooting-star"
+          :style="{
+            left: Math.random() * 50 + '%',
+            top: Math.random() * 30 + '%'
+          }"
+        ></div>
+        
+        <!-- Corações flutuantes sutis -->
+        <div
+          v-for="i in 10"
+          :key="'night-heart-' + i"
+          class="absolute text-pink-200 romantic-float opacity-30"
+          :style="{
+            left: Math.random() * 100 + '%',
+            top: Math.random() * 100 + '%',
+            fontSize: (6 + Math.random() * 8) + 'px',
+            animationDelay: Math.random() * 4 + 's',
+            animationDuration: (4 + Math.random() * 2) + 's'
+          }"
+        >
+          {{ ['💕', '✨', '💖'][Math.floor(Math.random() * 3)] }}
+        </div>
       </div>
 
       <!-- Conteúdo da tela inicial -->
       <div class="text-center px-6 max-w-sm mx-auto relative z-10">
         <div class="mb-8">
-          <div class="text-7xl mb-6 romantic-pulse">💕</div>
+          <div class="text-7xl mb-6 romantic-pulse">🌙</div>
           <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-2xl leading-tight romantic-glow">
             Para {{ userName }}
           </h1>
           <p class="text-lg text-pink-100 font-light opacity-90 leading-relaxed">
-            Uma surpresa especial te aguarda...
+            Uma noite mágica te aguarda...
           </p>
         </div>
 
-        <!-- Botão de iniciar com efeito glass -->
+        <!-- Botão com tema noturno -->
         <button
           @click="startExperience"
-          class="group romantic-glass-button w-full max-w-xs relative overflow-hidden"
+          class="group romantic-night-button w-full max-w-xs relative overflow-hidden"
           style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
         >
-          <!-- Efeito de brilho animado -->
           <div class="absolute inset-0 romantic-shimmer opacity-0 group-hover:opacity-100 group-active:opacity-100"></div>
           
           <div class="relative flex items-center justify-center space-x-3">
-            <span class="text-2xl">🎁</span>
-            <span>Abrir Presente</span>
-            <span class="text-2xl romantic-bounce">💖</span>
+            <span class="text-2xl">✨</span>
+            <span>Iniciar Experiência</span>
+            <span class="text-2xl romantic-bounce">💫</span>
           </div>
         </button>
 
         <p class="text-pink-200 text-sm mt-6 opacity-70 romantic-twinkle">
-          ✨ Prepare-se para uma experiência mágica ✨
+          🌟 Sob o céu estrelado do nosso amor 🌟
         </p>
       </div>
     </div>
@@ -956,32 +1322,56 @@ window.addEventListener('unhandledrejection', (event) => {
         </div>
       </div>
 
-      <!-- Background dinâmico romântico -->
-      <div class="fixed inset-0 romantic-dynamic-bg" :class="currentBg">
-        <!-- Camada base com gradiente -->
-        <div class="absolute inset-0 romantic-base-gradient"></div>
+      <!-- Background noturno romântico com estrelas -->
+      <div class="fixed inset-0 romantic-night-bg" :class="currentBg">
+        <!-- Camada base noturna -->
+        <div class="absolute inset-0 romantic-night-gradient"></div>
         
-        <!-- Partículas de fundo interativas -->
+        <!-- Estrelas cintilantes -->
+        <div v-if="!prefersReducedMotion" class="absolute inset-0 overflow-hidden pointer-events-none">
+          <div
+            v-for="star in stars"
+            :key="'bg-star-' + star.id"
+            class="absolute rounded-full bg-white star-twinkle"
+            :style="{
+              left: star.x + '%',
+              top: star.y + '%',
+              width: star.size + 'px',
+              height: star.size + 'px',
+              opacity: star.brightness * 0.8,
+              animationDelay: star.twinkle + 's',
+              animationDuration: (star.twinkle + 2) + 's'
+            }"
+          ></div>
+          
+          <!-- Estrelas cadentes no fundo -->
+          <div
+            v-for="shootingStar in shootingStars"
+            :key="'bg-shooting-' + shootingStar.id"
+            class="absolute shooting-star-bg"
+          ></div>
+        </div>
+        
+        <!-- Partículas românticas -->
         <div v-if="!prefersReducedMotion" class="absolute inset-0 overflow-hidden pointer-events-none">
           <div
             v-for="particle in backgroundParticles"
-            :key="'bg-particle-' + particle.id"
-            class="absolute romantic-particle"
+            :key="'night-particle-' + particle.id"
+            class="absolute romantic-night-particle"
             :style="{
               left: particle.x + '%',
               top: particle.y + '%',
               width: particle.size + 'px',
               height: particle.size + 'px',
-              opacity: particle.opacity,
-              transform: `translate(${Math.sin(backgroundTime + particle.id) * 20}px, ${Math.cos(backgroundTime + particle.id) * 10}px)`
+              opacity: particle.opacity
             }"
           ></div>
         </div>
         
-        <!-- Efeito de mouse/toque -->
+        <!-- Efeito de mouse/toque com brilho lunar -->
         <div 
           v-if="!prefersReducedMotion"
-          class="absolute romantic-mouse-effect pointer-events-none"
+          class="absolute romantic-moon-glow pointer-events-none"
           :style="{
             left: mousePosition.x + '%',
             top: mousePosition.y + '%',
@@ -989,78 +1379,72 @@ window.addEventListener('unhandledrejection', (event) => {
           }"
         ></div>
         
-        <!-- Overlay suave -->
-        <div class="absolute inset-0 bg-black/10 backdrop-blur-[1px]"></div>
+        <!-- Overlay suave noturno -->
+        <div class="absolute inset-0 bg-black/20 backdrop-blur-[0.5px]"></div>
         
-        <!-- Efeito de transição suave -->
+        <!-- Efeito de transição -->
         <div 
           v-if="isTransitioning"
-          class="absolute inset-0 romantic-transition-overlay"
+          class="absolute inset-0 romantic-night-transition"
         ></div>
       </div>
 
-      <!-- Header compacto para iPhone -->
-      <header class="relative z-20 p-4 flex justify-between items-center">
-        <!-- Player mini otimizado -->
-        <button 
-          @click="togglePlayer"
-          class="bg-gradient-to-r from-pink-500/20 to-red-500/20 backdrop-blur-xl rounded-3xl p-3 text-white hover:from-pink-500/30 hover:to-red-500/30 transition-all duration-300 border border-pink-300/30 shadow-xl flex-1 max-w-xs"
-          style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
-        >
-          <div class="flex items-center space-x-3">
-            <div class="relative flex-shrink-0">
-              <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg ring-2 ring-pink-300/50">
-                <img 
-                  :src="DuasMetadesFoto" 
-                  alt="Duas Metades" 
-                  class="w-full h-full object-cover"
-                />
+      <!-- Header reorganizado - Player no topo -->
+      <header class="relative z-30 p-4">
+        <!-- Player principal no topo -->
+        <div class="mb-4">
+          <button 
+            @click="togglePlayer"
+            class="bg-gradient-to-r from-indigo-900/40 to-purple-900/40 backdrop-blur-xl rounded-3xl p-3 text-white hover:from-indigo-800/50 hover:to-purple-800/50 transition-all duration-300 border border-purple-400/30 shadow-2xl w-full"
+            style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
+          >
+            <div class="flex items-center space-x-3">
+              <div class="relative flex-shrink-0">
+                <div class="w-12 h-12 rounded-xl overflow-hidden shadow-lg ring-2 ring-purple-300/50">
+                  <img 
+                    :src="DuasMetadesFoto" 
+                    alt="Duas Metades" 
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <div class="absolute -top-1 -right-1 text-purple-300" :class="prefersReducedMotion ? '' : 'animate-pulse'">
+                  <span class="text-xs">🌙</span>
+                </div>
               </div>
-              <div class="absolute -top-1 -right-1 text-pink-300" :class="prefersReducedMotion ? '' : 'animate-pulse'">
-                <span class="text-xs">💕</span>
+              
+              <div class="flex-1 text-left min-w-0">
+                <p class="text-white text-sm font-bold truncate">Duas Metades</p>
+                <p class="text-purple-200 text-xs truncate opacity-90">Jorge e Matheus</p>
               </div>
+              
+              <button 
+                @click.stop="toggleMusic"
+                class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full p-2 text-white flex-shrink-0 shadow-lg"
+                style="touch-action: manipulation;"
+              >
+                <div v-if="isPlaying" class="flex space-x-0.5">
+                  <div class="w-1 h-3 bg-white rounded-full"></div>
+                  <div class="w-1 h-3 bg-white rounded-full"></div>
+                </div>
+                <svg v-else class="w-3 h-3 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </button>
+              
+              
             </div>
             
-            <div class="flex-1 text-left min-w-0">
-              <p class="text-white text-sm font-bold truncate">Duas Metades</p>
-              <p class="text-pink-200 text-xs truncate opacity-90">Jorge e Matheus</p>
-            </div>
-            
-            <button 
-              @click.stop="toggleMusic"
-              class="bg-gradient-to-r from-pink-500 to-red-500 rounded-full p-2 text-white flex-shrink-0"
-              style="touch-action: manipulation;"
-            >
-              <div v-if="isPlaying" class="flex space-x-0.5">
-                <div class="w-1 h-3 bg-white rounded-full"></div>
-                <div class="w-1 h-3 bg-white rounded-full"></div>
+            <!-- Barra de progresso -->
+            <div v-if="duration > 0" class="mt-3">
+              <div class="h-1 bg-purple-300/20 rounded-full overflow-hidden">
+                <div 
+                  class="h-full bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full transition-all duration-300"
+                  :style="{ width: (currentTime / duration) * 100 + '%' }"
+                ></div>
               </div>
-              <svg v-else class="w-3 h-3 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-            </button>
-          </div>
-          
-          <!-- Barra de progresso mini -->
-          <div v-if="duration > 0" class="mt-2">
-            <div class="h-1 bg-pink-300/30 rounded-full overflow-hidden">
-              <div 
-                class="h-full bg-gradient-to-r from-pink-400 to-red-400 rounded-full transition-all duration-300"
-                :style="{ width: (currentTime / duration) * 100 + '%' }"
-              ></div>
             </div>
-          </div>
-        </button>
-
-        <!-- Botão de mensagem -->
-        <button 
-          @click="showRandomMessage"
-          class="ml-3 bg-gradient-to-r from-pink-500/20 to-red-500/20 backdrop-blur-xl rounded-2xl p-4 text-white hover:from-pink-500/30 hover:to-red-500/30 transition-all duration-300 border border-pink-300/30 shadow-xl relative"
-          style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
-        >
-          <span class="text-xl">💌</span>
-          <div class="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-pink-500 to-red-500 rounded-full" :class="prefersReducedMotion ? '' : 'animate-ping'"></div>
-        </button>
+          </button>
+        </div>
       </header>
 
       <!-- Conteúdo principal adaptado para iPhone -->
@@ -1075,7 +1459,7 @@ window.addEventListener('unhandledrejection', (event) => {
             <p class="text-white opacity-90 text-base leading-relaxed">{{ sections[currentSection].content }}</p>
           </div>
 
-          <!-- Grid 2x2 otimizado para iPhone -->
+          <!-- Grid 2x2 com proporção 9:16 -->
           <div class="grid grid-cols-2 gap-4 mb-8">
             <div
               v-for="(photo, index) in photos.slice(0, 4)"
@@ -1093,14 +1477,18 @@ window.addEventListener('unhandledrejection', (event) => {
               @touchend="(e: TouchEvent) => handleTouchEnd(e, photo.id, index)"
               style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
             >
-              <div class="bg-white p-3 pb-12 rounded-lg shadow-xl border border-gray-200 relative">
-                <div class="relative overflow-hidden rounded">
+              <div class="bg-white p-3 pb-12 rounded-lg shadow-xl border border-gray-200 relative night-polaroid">
+                <div class="relative overflow-hidden rounded aspect-[9/16]">
                   <img
                     :src="photo.url"
                     :alt="photo.caption"
-                    class="w-full h-28 object-cover"
+                    class="w-full h-full object-cover object-center"
                     loading="lazy"
+                    style="object-fit: cover;"
                   />
+                  
+                  <!-- Efeito de brilho noturno -->
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
                 </div>
                 
                 <div class="mt-3 space-y-1">
@@ -1108,8 +1496,9 @@ window.addEventListener('unhandledrejection', (event) => {
                   <p class="text-gray-600 text-xs text-center">{{ photo.date }}</p>
                 </div>
                 
-                <!-- Fita decorativa -->
-                <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-8 h-4 bg-yellow-200 opacity-70 rounded rotate-12"></div>
+                <!-- Fita decorativa noturna -->
+                <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-8 h-4 bg-indigo-200 opacity-70 rounded rotate-12 shadow-md"></div>
+                <div class="absolute -top-1 right-3 w-4 h-2 bg-purple-200 opacity-60 rounded rotate-45"></div>
               </div>
             </div>
           </div>
@@ -1132,7 +1521,7 @@ window.addEventListener('unhandledrejection', (event) => {
             <h2 class="text-lg text-pink-100 mb-3 font-light">{{ sections[currentSection].subtitle }}</h2>
           </div>
 
-          <!-- Grid vertical para iPhone -->
+          <!-- Grid vertical com proporção correta -->
           <div class="space-y-4 mb-6">
             <div
               v-for="(photo, index) in photos"
@@ -1142,17 +1531,21 @@ window.addEventListener('unhandledrejection', (event) => {
               @click="openPhotoModal(index)"
               style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
             >
-              <div class="bg-white p-3 pb-8 rounded-lg shadow-lg border border-gray-200 relative">
-                <div class="relative overflow-hidden rounded">
+              <div class="bg-white p-3 pb-8 rounded-lg shadow-lg border border-gray-200 relative night-polaroid">
+                <div class="relative overflow-hidden rounded aspect-[9/16] max-h-32">
                   <img
                     :src="photo.url"
                     :alt="photo.caption"
-                    class="w-full h-20 object-cover"
+                    class="w-full h-full object-cover object-center"
                     loading="lazy"
+                    style="object-fit: cover;"
                   />
-                  <div class="absolute top-1 right-1 bg-pink-500 text-white text-xs px-2 py-1 rounded-full">
+                  <div class="absolute top-1 right-1 bg-indigo-600 text-white text-xs px-2 py-1 rounded-full shadow-lg">
                     {{ index + 1 }}
                   </div>
+                  
+                  <!-- Overlay noturno sutil -->
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent"></div>
                 </div>
                 
                 <div class="mt-2">
@@ -1160,7 +1553,8 @@ window.addEventListener('unhandledrejection', (event) => {
                   <p class="text-gray-500 text-xs text-center">{{ photo.date }}</p>
                 </div>
                 
-                <div class="absolute -top-1 left-1/2 transform -translate-x-1/2 w-4 h-2 bg-yellow-200 opacity-60 rounded rotate-45"></div>
+                <!-- Fita noturna -->
+                <div class="absolute -top-1 left-1/2 transform -translate-x-1/2 w-4 h-2 bg-indigo-200 opacity-60 rounded rotate-45 shadow-sm"></div>
               </div>
             </div>
           </div>
@@ -1391,33 +1785,33 @@ window.addEventListener('unhandledrejection', (event) => {
           paddingBottom: safeAreaBottom + 16 + 'px'
         }"
       >
-        <!-- Controles superiores -->
-        <div class="absolute top-4 left-4 right-4 flex justify-between items-center text-white z-10"
+        <!-- Controles superiores com botão X mais visível -->
+        <div class="modal-controls-top"
              :style="{ top: safeAreaTop + 16 + 'px' }">
-          <div class="bg-black/60 backdrop-blur-sm px-3 py-2 rounded-full">
+          <div class="modal-counter">
             <span class="text-sm font-bold">{{ currentPhotoIndex + 1 }} / {{ photos.length }}</span>
           </div>
           <div class="flex space-x-2">
             <button 
               @click.stop="rotatePhoto" 
-              class="bg-white/20 hover:bg-white/40 rounded-full p-3 transition-all duration-300"
+              class="modal-button-rotate"
               style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
             >
-              🔄
+              <span class="text-lg">🔄</span>
             </button>
             <button 
               @click.stop="zoomPhoto" 
-              class="bg-white/20 hover:bg-white/40 rounded-full p-3 transition-all duration-300"
+              class="modal-button-zoom"
               style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
             >
-              🔍
+              <span class="text-lg">🔍</span>
             </button>
             <button 
               @click.stop="closePhotoModal" 
-              class="bg-red-500/80 hover:bg-red-500 rounded-full p-3 transition-all duration-300"
+              class="modal-button-close"
               style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
             >
-              ✕
+              <span class="text-lg font-bold">✕</span>
             </button>
           </div>
         </div>
@@ -1484,22 +1878,51 @@ window.addEventListener('unhandledrejection', (event) => {
       </div>
     </Transition>
 
-    <!-- Modal de mensagem otimizado -->
+    <!-- Botão de mensagem flutuante -->
+    <div class="floating-message-container" :style="{ bottom: safeAreaBottom + 80 + 'px' }">
+      <button 
+        @click="showRandomMessage"
+        class="floating-message-button group"
+        style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
+      >
+        <span class="text-xl">💌</span>
+        <div class="floating-message-indicator" :class="prefersReducedMotion ? '' : 'animate-ping'"></div>
+        
+        <!-- Tooltip -->
+        <div class="floating-message-tooltip group-hover:opacity-100">
+          <div class="tooltip-content">
+            Mensagem romântica
+            <div class="tooltip-arrow"></div>
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <!-- Notificações de mensagem reposicionadas -->
     <Transition
       enter-active-class="transition-all duration-500 ease-out"
-      enter-from-class="opacity-0 scale-50 translate-y-8"
-      enter-to-class="opacity-100 scale-100 translate-y-0"
+      enter-from-class="opacity-0 scale-50 translate-x-8 translate-y-8"
+      enter-to-class="opacity-100 scale-100 translate-x-0 translate-y-0"
       leave-active-class="transition-all duration-300 ease-in"
-      leave-from-class="opacity-100 scale-100 translate-y-0"
-      leave-to-class="opacity-0 scale-50 translate-y-8"
+      leave-from-class="opacity-100 scale-100 translate-x-0 translate-y-0"
+      leave-to-class="opacity-0 scale-50 translate-x-8 translate-y-8"
     >
       <div 
         v-if="showMessage"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
+        class="notification-container"
+        :style="{ bottom: safeAreaBottom + 140 + 'px' }"
       >
-        <div class="bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-3xl p-6 text-center shadow-2xl max-w-xs mx-auto border-4 border-white/50">
-          <div class="text-3xl mb-3" :class="prefersReducedMotion ? '' : 'animate-bounce'">💕</div>
-          <p class="text-lg font-bold leading-relaxed">{{ currentMessage }}</p>
+        <div class="notification-content">
+          <div class="flex items-center space-x-3">
+            <div class="notification-icon" :class="prefersReducedMotion ? '' : 'animate-bounce'">🌙</div>
+            <div>
+              <p class="text-sm font-bold leading-tight">{{ currentMessage }}</p>
+              <p class="text-xs text-purple-200 mt-1 opacity-80">✨ Mensagem especial ✨</p>
+            </div>
+          </div>
+          
+          <!-- Seta indicadora -->
+          <div class="notification-arrow"></div>
         </div>
       </div>
     </Transition>
@@ -1507,7 +1930,374 @@ window.addEventListener('unhandledrejection', (event) => {
 </template>
 
 <style scoped>
-/* Fundos românticos modernos */
+/* CSS inline específico para Safari iOS - elementos principais */
+
+/* Player principal */
+.player-button-main {
+  background: linear-gradient(135deg, 
+    rgba(67, 56, 202, 0.4) 0%, 
+    rgba(124, 58, 237, 0.4) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 24px;
+  padding: 12px;
+  color: white;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.player-button-main:hover,
+.player-button-main:active {
+  background: linear-gradient(135deg, 
+    rgba(67, 56, 202, 0.5) 0%, 
+    rgba(124, 58, 237, 0.5) 100%);
+}
+
+.album-cover-main {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(124, 58, 237, 0.5);
+}
+
+.moon-icon {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  color: #a78bfa;
+}
+
+.play-button-main {
+  background: linear-gradient(135deg, #7c3aed 0%, #4338ca 100%);
+  border-radius: 50%;
+  padding: 8px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pause-bar {
+  width: 4px;
+  height: 12px;
+  background: white;
+  border-radius: 2px;
+}
+
+.progress-bar-bg {
+  height: 4px;
+  background: rgba(167, 139, 250, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a78bfa 0%, #6366f1 100%);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Polaroids */
+.polaroid-container {
+  background: white;
+  padding: 12px;
+  padding-bottom: 48px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.photo-container-main {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  aspect-ratio: 9/16;
+}
+
+.photo-image-main {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.photo-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.2) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.tape-main {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(12deg);
+  width: 32px;
+  height: 16px;
+  background: #c7d2fe;
+  opacity: 0.7;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tape-secondary {
+  position: absolute;
+  top: -4px;
+  right: 12px;
+  transform: rotate(45deg);
+  width: 16px;
+  height: 8px;
+  background: #ddd6fe;
+  opacity: 0.6;
+  border-radius: 1px;
+}
+
+/* Modal */
+.modal-controls-top {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  z-index: 10;
+}
+
+.modal-counter {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px 12px;
+  border-radius: 20px;
+}
+
+.modal-button-rotate {
+  background: rgba(67, 56, 202, 0.8);
+  border-radius: 50%;
+  padding: 12px;
+  border: none;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.modal-button-rotate:hover,
+.modal-button-rotate:active {
+  background: rgba(67, 56, 202, 1);
+  transform: scale(1.05);
+}
+
+.modal-button-zoom {
+  background: rgba(124, 58, 237, 0.8);
+  border-radius: 50%;
+  padding: 12px;
+  border: none;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.modal-button-zoom:hover,
+.modal-button-zoom:active {
+  background: rgba(124, 58, 237, 1);
+  transform: scale(1.05);
+}
+
+.modal-button-close {
+  background: #dc2626;
+  border-radius: 50%;
+  padding: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.modal-button-close:hover,
+.modal-button-close:active {
+  background: #b91c1c;
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.6);
+}
+
+.modal-polaroid-container {
+  background: white;
+  padding: 16px;
+  padding-bottom: 64px;
+  border-radius: 16px;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 10px 20px rgba(124, 58, 237, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-photo-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  aspect-ratio: 9/16;
+  max-height: 320px;
+}
+
+.modal-photo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease;
+  cursor: pointer;
+}
+
+.modal-photo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Botão flutuante de mensagem */
+.floating-message-container {
+  position: fixed;
+  bottom: 80px;
+  right: 16px;
+  z-index: 30;
+}
+
+.floating-message-button {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border-radius: 50%;
+  padding: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.4);
+  position: relative;
+  transition: all 0.3s ease;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-message-button:hover,
+.floating-message-button:active {
+  background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+  transform: scale(1.05);
+  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.6);
+}
+
+.floating-message-indicator {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(45deg, #ec4899 0%, #ef4444 100%);
+  border-radius: 50%;
+}
+
+.floating-message-tooltip {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.tooltip-content {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  position: relative;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  top: 100%;
+  right: 16px;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid rgba(0, 0, 0, 0.8);
+}
+
+/* Notificação */
+.notification-container {
+  position: fixed;
+  bottom: 140px;
+  right: 16px;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.notification-content {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  max-width: 280px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  position: relative;
+}
+
+.notification-icon {
+  font-size: 24px;
+}
+
+.notification-arrow {
+  position: absolute;
+  bottom: -8px;
+  left: 24px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #4f46e5;
+}
 .romantic-welcome-bg {
   background: 
     radial-gradient(circle at 20% 80%, rgba(255, 182, 255, 0.4) 0%, transparent 50%),
