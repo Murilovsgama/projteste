@@ -1,4 +1,3 @@
-
 <style>
 .passionate-starlight {
   background: 
@@ -1432,9 +1431,7 @@ window.addEventListener('unhandledrejection', (event) => {
                 </svg>
               </button>
               
-              <div class="text-purple-300 text-sm">
-                {{ isPlaying ? '🎵' : '⏸️' }}
-              </div>
+              
             </div>
             
             <!-- Barra de progresso -->
@@ -1789,29 +1786,29 @@ window.addEventListener('unhandledrejection', (event) => {
         }"
       >
         <!-- Controles superiores com botão X mais visível -->
-        <div class="absolute top-4 left-4 right-4 flex justify-between items-center text-white z-10"
+        <div class="modal-controls-top"
              :style="{ top: safeAreaTop + 16 + 'px' }">
-          <div class="bg-black/60 backdrop-blur-sm px-3 py-2 rounded-full">
+          <div class="modal-counter">
             <span class="text-sm font-bold">{{ currentPhotoIndex + 1 }} / {{ photos.length }}</span>
           </div>
           <div class="flex space-x-2">
             <button 
               @click.stop="rotatePhoto" 
-              class="bg-indigo-600/80 hover:bg-indigo-600 rounded-full p-3 transition-all duration-300 backdrop-blur-sm"
+              class="modal-button-rotate"
               style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
             >
               <span class="text-lg">🔄</span>
             </button>
             <button 
               @click.stop="zoomPhoto" 
-              class="bg-purple-600/80 hover:bg-purple-600 rounded-full p-3 transition-all duration-300 backdrop-blur-sm"
+              class="modal-button-zoom"
               style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
             >
               <span class="text-lg">🔍</span>
             </button>
             <button 
               @click.stop="closePhotoModal" 
-              class="bg-red-600 hover:bg-red-700 rounded-full p-3 transition-all duration-300 shadow-lg ring-2 ring-white/30"
+              class="modal-button-close"
               style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
             >
               <span class="text-lg font-bold">✕</span>
@@ -1881,6 +1878,26 @@ window.addEventListener('unhandledrejection', (event) => {
       </div>
     </Transition>
 
+    <!-- Botão de mensagem flutuante -->
+    <div class="floating-message-container" :style="{ bottom: safeAreaBottom + 80 + 'px' }">
+      <button 
+        @click="showRandomMessage"
+        class="floating-message-button group"
+        style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
+      >
+        <span class="text-xl">💌</span>
+        <div class="floating-message-indicator" :class="prefersReducedMotion ? '' : 'animate-ping'"></div>
+        
+        <!-- Tooltip -->
+        <div class="floating-message-tooltip group-hover:opacity-100">
+          <div class="tooltip-content">
+            Mensagem romântica
+            <div class="tooltip-arrow"></div>
+          </div>
+        </div>
+      </button>
+    </div>
+
     <!-- Notificações de mensagem reposicionadas -->
     <Transition
       enter-active-class="transition-all duration-500 ease-out"
@@ -1892,12 +1909,12 @@ window.addEventListener('unhandledrejection', (event) => {
     >
       <div 
         v-if="showMessage"
-        class="fixed bottom-32 right-4 z-40 pointer-events-none"
+        class="notification-container"
         :style="{ bottom: safeAreaBottom + 140 + 'px' }"
       >
-        <div class="bg-gradient-to-br from-indigo-600 to-purple-600 text-white rounded-2xl p-4 shadow-2xl max-w-xs border-2 border-white/20 backdrop-blur-sm">
+        <div class="notification-content">
           <div class="flex items-center space-x-3">
-            <div class="text-2xl" :class="prefersReducedMotion ? '' : 'animate-bounce'">🌙</div>
+            <div class="notification-icon" :class="prefersReducedMotion ? '' : 'animate-bounce'">🌙</div>
             <div>
               <p class="text-sm font-bold leading-tight">{{ currentMessage }}</p>
               <p class="text-xs text-purple-200 mt-1 opacity-80">✨ Mensagem especial ✨</p>
@@ -1905,35 +1922,382 @@ window.addEventListener('unhandledrejection', (event) => {
           </div>
           
           <!-- Seta indicadora -->
-          <div class="absolute -bottom-2 left-6 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-indigo-600"></div>
+          <div class="notification-arrow"></div>
         </div>
       </div>
     </Transition>
-
-    <!-- Botão de mensagem flutuante -->
-    <div class="fixed bottom-20 right-4 z-30" :style="{ bottom: safeAreaBottom + 80 + 'px' }">
-      <button 
-        @click="showRandomMessage"
-        class="bg-gradient-to-br from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-full p-4 text-white transition-all duration-300 shadow-2xl border-2 border-white/20 backdrop-blur-sm relative group"
-        style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
-      >
-        <span class="text-xl">💌</span>
-        <div class="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-pink-500 to-red-500 rounded-full" :class="prefersReducedMotion ? '' : 'animate-ping'"></div>
-        
-        <!-- Tooltip -->
-        <div class="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <div class="bg-black/80 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap backdrop-blur-sm">
-            Mensagem romântica
-            <div class="absolute top-full right-4 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-black/80"></div>
-          </div>
-        </div>
-      </button>
-    </div>
   </div>
 </template>
 
 <style scoped>
-/* Fundos românticos modernos */
+/* CSS inline específico para Safari iOS - elementos principais */
+
+/* Player principal */
+.player-button-main {
+  background: linear-gradient(135deg, 
+    rgba(67, 56, 202, 0.4) 0%, 
+    rgba(124, 58, 237, 0.4) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 24px;
+  padding: 12px;
+  color: white;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.player-button-main:hover,
+.player-button-main:active {
+  background: linear-gradient(135deg, 
+    rgba(67, 56, 202, 0.5) 0%, 
+    rgba(124, 58, 237, 0.5) 100%);
+}
+
+.album-cover-main {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(124, 58, 237, 0.5);
+}
+
+.moon-icon {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  color: #a78bfa;
+}
+
+.play-button-main {
+  background: linear-gradient(135deg, #7c3aed 0%, #4338ca 100%);
+  border-radius: 50%;
+  padding: 8px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pause-bar {
+  width: 4px;
+  height: 12px;
+  background: white;
+  border-radius: 2px;
+}
+
+.progress-bar-bg {
+  height: 4px;
+  background: rgba(167, 139, 250, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a78bfa 0%, #6366f1 100%);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Polaroids */
+.polaroid-container {
+  background: white;
+  padding: 12px;
+  padding-bottom: 48px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.photo-container-main {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  aspect-ratio: 9/16;
+}
+
+.photo-image-main {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.photo-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.2) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.tape-main {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(12deg);
+  width: 32px;
+  height: 16px;
+  background: #c7d2fe;
+  opacity: 0.7;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tape-secondary {
+  position: absolute;
+  top: -4px;
+  right: 12px;
+  transform: rotate(45deg);
+  width: 16px;
+  height: 8px;
+  background: #ddd6fe;
+  opacity: 0.6;
+  border-radius: 1px;
+}
+
+/* Modal */
+.modal-controls-top {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  z-index: 10;
+}
+
+.modal-counter {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px 12px;
+  border-radius: 20px;
+}
+
+.modal-button-rotate {
+  background: rgba(67, 56, 202, 0.8);
+  border-radius: 50%;
+  padding: 12px;
+  border: none;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.modal-button-rotate:hover,
+.modal-button-rotate:active {
+  background: rgba(67, 56, 202, 1);
+  transform: scale(1.05);
+}
+
+.modal-button-zoom {
+  background: rgba(124, 58, 237, 0.8);
+  border-radius: 50%;
+  padding: 12px;
+  border: none;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.modal-button-zoom:hover,
+.modal-button-zoom:active {
+  background: rgba(124, 58, 237, 1);
+  transform: scale(1.05);
+}
+
+.modal-button-close {
+  background: #dc2626;
+  border-radius: 50%;
+  padding: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.modal-button-close:hover,
+.modal-button-close:active {
+  background: #b91c1c;
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.6);
+}
+
+.modal-polaroid-container {
+  background: white;
+  padding: 16px;
+  padding-bottom: 64px;
+  border-radius: 16px;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 10px 20px rgba(124, 58, 237, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-photo-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  aspect-ratio: 9/16;
+  max-height: 320px;
+}
+
+.modal-photo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease;
+  cursor: pointer;
+}
+
+.modal-photo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Botão flutuante de mensagem */
+.floating-message-container {
+  position: fixed;
+  bottom: 80px;
+  right: 16px;
+  z-index: 30;
+}
+
+.floating-message-button {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border-radius: 50%;
+  padding: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.4);
+  position: relative;
+  transition: all 0.3s ease;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-message-button:hover,
+.floating-message-button:active {
+  background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+  transform: scale(1.05);
+  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.6);
+}
+
+.floating-message-indicator {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(45deg, #ec4899 0%, #ef4444 100%);
+  border-radius: 50%;
+}
+
+.floating-message-tooltip {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.tooltip-content {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  position: relative;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  top: 100%;
+  right: 16px;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid rgba(0, 0, 0, 0.8);
+}
+
+/* Notificação */
+.notification-container {
+  position: fixed;
+  bottom: 140px;
+  right: 16px;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.notification-content {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  max-width: 280px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  position: relative;
+}
+
+.notification-icon {
+  font-size: 24px;
+}
+
+.notification-arrow {
+  position: absolute;
+  bottom: -8px;
+  left: 24px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #4f46e5;
+}
 .romantic-welcome-bg {
   background: 
     radial-gradient(circle at 20% 80%, rgba(255, 182, 255, 0.4) 0%, transparent 50%),
