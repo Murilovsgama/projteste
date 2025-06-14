@@ -4,6 +4,13 @@ import { ref, onMounted, computed } from 'vue'
 // Imports das mídias
 import DuasMetadesMsc from '@/assets/music/DuasMetadesMsc.mp3'
 import DuasMetadesFoto from '@/assets/images/Duas_Metades.jpg'
+import FotoCachoeira from '@/assets/images/WhatsApp Image 2025-06-13 at 22.15.22 1.svg'
+import FotoAbraco from '@/assets/images/WhatsApp Image 2025-06-13 at 22.10.08.svg'
+import FotoConjunto from '@/assets/images/WhatsApp Image 2025-06-13 at 22.07.30.svg'
+import FotoPico from '@/assets/images/WhatsApp Image 2025-06-13 at 22.06.22.svg'
+import FotoZoo from '@/assets/images/WhatsApp Image 2025-06-13 at 22.04.02.svg'
+import FotoLingua from '@/assets/images/WhatsApp Image 2025-06-13 at 22.41.21 1 (1).svg'
+
 
 // Tipos TypeScript
 interface HeartElement {
@@ -54,7 +61,7 @@ const currentSection = ref<number>(0)
 const hearts = ref<HeartElement[]>([])
 const showMessage = ref<boolean>(false)
 const currentMessage = ref<string>('')
-const userName = ref<string>('Minha Princesa')
+const userName = ref<string>(': Sara, minha princesa')
 const currentPhotoIndex = ref<number>(0)
 const showPhotoModal = ref<boolean>(false)
 const photoZoom = ref<number>(1)
@@ -83,7 +90,7 @@ const isTransitioning = ref<boolean>(false)
 const sections: Section[] = [
   {
     title: 'Nossos Momentos Mágicos',
-    subtitle: 'Polaroids do Coração',
+    subtitle: '',
     content: 'Cada foto é uma janela para nossas memórias mais preciosas...',
     bg: 'from-purple-400 via-pink-500 to-red-500',
     icon: '📸',
@@ -92,13 +99,13 @@ const sections: Section[] = [
   {
     title: 'Galeria do Nosso Amor',
     subtitle: 'Coleção de Sorrisos',
-    content: 'Uma timeline visual da nossa jornada juntos...',
+    content: '',
     bg: 'from-indigo-400 via-purple-500 to-pink-500',
     icon: '🖼️',
     type: 'gallery'
   },
   {
-    title: `Para ${userName.value} ❤️`,
+    title: `Para: ${userName.value} ❤️`,
     subtitle: 'Meu Amor Infinito',
     content: 'Você é a luz que ilumina meus dias e a melodia que embala meus sonhos...',
     bg: 'from-pink-400 via-red-400 to-pink-600',
@@ -119,49 +126,49 @@ const sections: Section[] = [
 const photos: Photo[] = [
   {
     id: 1,
-    url: DuasMetadesFoto,
-    caption: 'Primeiro olhar que mudou tudo ❤️',
-    date: 'Janeiro 2024',
-    location: 'Café da Esquina',
+    url: FotoAbraco,
+    caption: 'O melhor abraço do mundo❤️',
+    date: '22024',
+    location: '',
     effect: 'hearts',
-    story: 'Lembro como se fosse ontem... seus olhos brilharam e meu mundo mudou para sempre.',
+    story: 'O lugar que me conforta.',
     polaroidStyle: 'rotate-3 shadow-pink-300/50'
   },
   {
     id: 2,
-    url: DuasMetadesFoto,
-    caption: 'Caminhada dos sonhos 🌸',
-    date: 'Fevereiro 2024',
-    location: 'Parque das Flores',
+    url: FotoCachoeira,
+    caption: 'Nossa primeira Trilha',
+    date: 'Novembro 2024',
+    location: '',
     effect: 'sparkles',
-    story: 'Nossas mãos se encontraram pela primeira vez... e nunca mais se soltaram.',
+    story: 'Foi um dia incrível e essas fotos merecem um quadro, não acha?',
     polaroidStyle: '-rotate-2 shadow-purple-300/50'
   },
   {
     id: 3,
-    url: DuasMetadesFoto,
-    caption: 'Jantar à luz de velas 🍷',
-    date: 'Março 2024',
-    location: 'Restaurante do Amor',
+    url: FotoPico,
+    caption: 'Que venham muitos e muitos pagodes ao vivo para nós🍷',
+    date: 'Fevereiro 2025',
+    location: '',
     effect: 'glow',
-    story: 'A noite em que soube que era amor verdadeiro...',
+    story: '',
     polaroidStyle: 'rotate-1 shadow-red-300/50'
   },
   {
     id: 4,
-    url: DuasMetadesFoto,
-    caption: 'Nossa primeira viagem ✈️',
-    date: 'Abril 2024',
-    location: 'Praia do Paraíso',
+    url: FotoZoo,
+    caption: 'Nosso dia no Zoológico ',
+    date: 'Fevereiro 2025',
+    location: '',
     effect: 'zoom',
-    story: 'Descobrimos que somos parceiros perfeitos em qualquer lugar.',
+    story: 'Um dos incrível em que pude te ver toda criancinha conhecendo os oxolotes',
     polaroidStyle: '-rotate-1 shadow-blue-300/50'
   },
   {
     id: 5,
-    url: DuasMetadesFoto,
-    caption: 'Momento de pura felicidade 💫',
-    date: 'Maio 2024',
+    url: FotoConjunto,
+    caption: 'Que possamos ser sempre o porto seguro um do outro 💫',
+    date: 'Abril 2025',
     location: 'Nossa Casa',
     effect: 'rotate',
     story: 'Quando percebemos que lar é estar com quem amamos.',
@@ -169,12 +176,12 @@ const photos: Photo[] = [
   },
   {
     id: 6,
-    url: DuasMetadesFoto,
-    caption: 'Crescendo juntos 🌹',
-    date: 'Junho 2024',
-    location: 'Jardim Secreto',
+    url: FotoLingua,
+    caption: 'Obrigado por tudo🌹',
+    date: 'Junho 2025',
+    location: '',
     effect: 'pulse',
-    story: 'Como flores que crescem lado a lado, nosso amor só fica mais forte.',
+    story: 'Que venha muitas e muitas datas para comemorarmos',
     polaroidStyle: '-rotate-3 shadow-green-300/50'
   }
 ]
@@ -778,12 +785,7 @@ if (typeof window !== 'undefined') {
           </button>
         </div>
         
-        <!-- Indicador de progresso -->
-        <div class="text-center">
-          <div class="text-white text-sm bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm">
-            {{ currentSection + 1 }} / {{ sections.length }}
-          </div>
-        </div>
+        
 
         <!-- Botão de mensagem -->
         <button 
@@ -815,7 +817,7 @@ if (typeof window !== 'undefined') {
             <div
               v-for="(photo, index) in photos.slice(0, 4)"
               :key="photo.id"
-              class="polaroid-frame transform transition-all duration-700 hover:scale-110 hover:-translate-y-4 cursor-pointer"
+              class="polaroid-frame transform transition-all duration-700 hover:scale-125 hover:-translate-y-6 cursor-pointer"
               :class="[
                 photo.polaroidStyle,
                 {
